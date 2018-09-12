@@ -90,3 +90,81 @@
              (= col row)) 1)
         (else (+ (pascal (- row 1) (- col 1))
                  (pascal (- row 1) col )))))
+
+(define (expt-r b n)
+  (if (= n 0)
+      1
+      (* b (expt-r b (- n 1)))))
+
+(define (expt-i b n)
+  (define (expt-iter p n)
+    (if (= n 0)
+        p
+        (expt-iter (* p b) (- n 1)))
+    )
+  (expt-iter 1 n))
+
+(define (even? x)
+  (= (remainder x 2) 0))
+
+(define (fast-expt b n)
+  (cond ((= n 0) 1)
+        ((even? n) (square (fast-expt b (/ n 2))))
+        (else (* b (fast-expt b (- n 1))))
+        )
+  )
+
+;; 1.16
+(define (fast-expt-a b n)
+  (cond ((= n 0) 1)
+        ((even? n) (fast-expt-a (square b) (/ n 2)))
+        (else (* b (fast-expt-a b (- n 1))))
+        )
+  )
+
+(define (fast-expt-2 b n)
+  (define (fast-expt-iter p b n)
+    (cond ((= n 0) p)
+          ((even? n) (fast-expt-iter p (square b) (/ n 2)))
+          (else (fast-expt-iter (* p b) b (- n 1)))
+          )
+    )
+  (fast-expt-iter 1 b n)
+  )
+
+;; 1.17
+(define (c-mult a b)
+  (if (= b 0)
+      0
+      (+ a (c-mult a (- b 1))))
+  )
+
+(define (c-mult-2 a b)
+  (define (c-mult-iter p a b)
+    (if (= b 0)
+        p
+        (c-mult-iter (+ p a) a (- b 1)))
+    )
+  (c-mult-iter 0 a b)
+  )
+
+(define (c-mult-3 a b)
+  (define (double x) (* x 2))
+  (define (halve x) (/ x 2))
+  (cond ((= b 0) 0)
+        ((even? b) (c-mult-3 (double a) (halve b)))
+        (else (+ a (c-mult-3 a (- b 1))))
+        )
+  )
+
+(define (c-mult-4 a b)
+  (define (double x) (* x 2))
+  (define (halve x) (/ x 2))
+  (define (c-mult-iter p a b)
+    (cond ((= b 0) p)
+          ((even? b) (c-mult-iter p (double a) (halve b)))
+          (else (c-mult-iter (+ p a) a (- b 1)))
+          )
+    )
+  (c-mult-iter 0 a b)
+  )
