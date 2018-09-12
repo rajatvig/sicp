@@ -82,3 +82,11 @@
         (f3-iter b c (f3-op a b c) (- n 1)))
     )
   (f3-iter 0 1 2 n))
+
+(define (pascal row col)
+  (cond ((or (< row col)
+             (< col 1)) 0 )
+        ((or (= col 1)
+             (= col row)) 1)
+        (else (+ (pascal (- row 1) (- col 1))
+                 (pascal (- row 1) col )))))
