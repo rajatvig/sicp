@@ -1,5 +1,8 @@
 #lang sicp
 
+(#%require racket/math)
+(#%require math/base)
+
 (define pi 3.14)
 (define radius 10)
 (define area (* pi (* radius radius)))
@@ -189,15 +192,10 @@
         ((even? exp) (remainder (square (expmod base (/ exp 2) m)) m))
         (else (remainder (* base (expmod base (- exp 1) m)) m))))
 
-;; (define (fermat-test n)
-;;   (define (try-it a)
-;;     (= (expmod a n n) a))
-;;   (try-it (round (* n (random)))))
-
 (define (fermat-test n)
   (define (try-it a)
     (= (expmod a n n) a))
-  (try-it (+ 1 (random (- n 1)))))
+  (try-it (+ 1 (random-natural (- n 1)))))
 
 (define (fast-prime? n times)
   (cond ((= times 0) #t)
@@ -210,11 +208,27 @@
   (start-prime-test n (runtime)))
 
 (define (start-prime-test n start-time)
-  (if (prime? n)
-      (report-prime (- (runtime) start-time))
+  (if (fast-prime? n 10)
+      (report (- (runtime) start-time))
       #f))
 
-(define (report-prime elapsed-time)
+(define (report elapsed-time)
+  (newline)
   (display " *** ")
   (display elapsed-time)
   #t)
+
+;; 1.22
+(define (search-for-primes n count)
+  (cond ((= count 0))
+        ((fast-prime? n 10)
+         (report n)
+         (search-for-primes (+ 1 n) (- count 1)))
+        (else (search-for-primes (+ 1 n) count))))
+
+(define (timed-search n count)
+  (define (timed-search-inner n count start-time)
+    (search-for-primes n count)
+    (report (/ (- (runtime) start-time) count))
+    )
+  (timed-search-inner n count (runtime)))
