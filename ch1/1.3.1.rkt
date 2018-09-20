@@ -12,7 +12,7 @@
   (sum cube a inc b))
 
 (define (sum-integers a b)
-  (define (inc n) (+ n 1))
+  (define (inc x) (+ x 1))
   (define (identity x) x)
   (sum identity a inc b))
 
