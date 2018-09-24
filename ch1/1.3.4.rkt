@@ -34,3 +34,53 @@
 
 (define (sqrt-f x)
   (fixed-point-of-transform (lambda (y) (- (square y) x)) newton-transform 1.0))
+
+;; 1.40
+
+(define (cubic a b c)
+  (fixed-point-of-transform (lambda (x) (+ (cube x) (* x x a) (* x b) c)) newton-transform 1.0))
+
+;; 1.41
+
+(define (double f)
+  (lambda (x) (f (f x))))
+
+;; 1.42
+
+(define (compose f g)
+  (lambda (x) (f (g x))))
+
+;; 1.43
+
+(define (repeated f n)
+  (if (= n 0)
+      (lambda (x) x)
+      (compose f (repeated f (- n 1))))
+  )
+
+;; 1.44
+
+(define (smoothing f)
+  (lambda (x) (/ (+ (f (- x dx)) (f x) (f (+ x dx))) 3)))
+
+(define (smoothing-nfold f n)
+  (repeated smoothing n) f)
+
+;; 1.45
+
+(define (cubic-rt x)
+  (fixed-point-of-transform (lambda (y) (- (cube y) x)) newton-transform 1.0))
+
+(define (cubic-rt-d x)
+  (fixed-point-of-transform (lambda (y) (/ x (square y))) average-damp 1.0))
+
+(define (average x y) (/ (+ x y) 2))
+
+(define (average-damp f)
+  (lambda (x) (average x (f x))))
+
+(define (nth-root x n)
+  (fixed-point-of-transform (lambda (y) (- (expt y n) x)) newton-transform 1.0))
+
+(define (nth-root-d x n)
+  (fixed-point-of-transform (lambda (y) (/ x (expt y (- n 1)))) (repeated average-damp (floor (log n))) 1.0))
