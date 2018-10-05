@@ -6,7 +6,9 @@
       (gcd b (remainder a b))))
 
 (define (make-rat n d)
-  (cons n d))
+  (let ((g (gcd (abs n) (abs d)))
+        (neg (< d 0)))
+    (cons (/ (if neg (- n) n) g) (/ (abs d) g))))
 
 (define (denom rat)
   (cdr rat))
