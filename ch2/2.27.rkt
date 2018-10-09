@@ -21,3 +21,6 @@
 
 (d-reverse (list x y z a))
 (list 10 (list 9 8 7) (list 6 5 4) (list 3 2 1))
+
+(define (q-reverse l)
+  (reverse (map reverse l)))
