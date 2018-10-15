@@ -5,7 +5,7 @@
 
 (define pi 3.14)
 (define radius 10)
-(define area (* pi (* radius radius)))
+(define (area radius) (* pi (* radius radius)))
 
 (define (square x) (* x x))
 (define (cube x) (* x x x))
@@ -24,7 +24,7 @@
 (define (sqrt x)
   (define (sqrt-iter guess)
     (define (good-enough? guess)
-      (< (abs (- (square guess) x)) 0.0001))
+      (< (abs (- (square guess) x)) 0.0000001))
     (define (improve guess)
       (/ (+ guess (/ x guess)) 2))
     (if (good-enough? guess)
